@@ -620,14 +620,14 @@
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700; margin-top: 6px">{{borrowerData.avail}}</div>
               <div style="font-size: 13px; color: #15222B; margin-top: 4px">Illustrative available capacity · synthetic data</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 8px">
-                Total Facility: ${{borrowerData.limit}}K • Drawn: ${{borrowerData.drawn}}K ({{borrowerData.linePct}}% used)
+                Total Facility: {{borrowerData.limit}} • Drawn: {{borrowerData.drawn}} ({{borrowerData.linePct}}% used)
               </div>
               <button type="button" onClick="{{switchBorrowerAdvance}}" style="margin-top: 14px; width: 100%; min-height: 38px; border-radius: 6px; border: 0; background: #0B5F6B; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Preview sample invoice advance</button>
             </div>
 
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px; border-top: 4px solid #15222B">
               <div style="font-size: 12px; font-weight: 700; color: #15222B">SAMPLE SBA 7(a) TERM LOAN ({{borrowerProfile.bank}})</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700; margin-top: 6px">${{borrowerData.termBal}}K</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700; margin-top: 6px">{{borrowerData.termBal}}</div>
               <div style="font-size: 13px; color: #15222B; margin-top: 4px">Illustrative amortizing principal</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 8px">
                 Next P&amp;I Payment: <b>${{borrowerData.termPmt}}K</b> due on 1st • DSCR: <b>{{borrowerData.dscr}}x</b>
@@ -639,7 +639,7 @@
 
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px; border-top: 4px solid #F2B66D">
               <div style="font-size: 12px; font-weight: 700; color: #9A5A0A">MODELED NET CASH SWEEP</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700; margin-top: 6px">${{borrowerData.sweptAmount}}K</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700; margin-top: 6px">{{borrowerData.sweptAmount}}</div>
               <div style="font-size: 13px; color: #15222B; margin-top: 4px">Modeled net cash swept this week</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 8px">
                 Destination: Operating Checking <b>*7742</b> at <b>{{borrowerProfile.bank}}</b>
@@ -1244,7 +1244,7 @@ class Component extends DCLogic {
       summary: selFlags.length === 0 ? 'Every indicator is within normal range this week.' : 'Needs attention: ' + selFlags.join('; ') + '.',
       items: [
         { label: 'Debt coverage', text: sv.cov.toFixed(2) + 'x', source: 'Borrower books · illustrative 1.25x monitoring threshold; confirm against loan terms', boxStyle: st.box[this.gradeBank('cov', sv)] },
-        { label: 'Available on the line', text: '$' + Math.round((sv.ar - sv.inelig) * sv.adv - (selBorrower.limit * sv.line / 100)) + 'K', source: 'eCapital borrowing base', boxStyle: '' },
+        { label: 'Available on the line', text: ((k) => (k < 0 ? '\u2212$' : '$') + Math.abs(Math.round(k)) + 'K')((sv.ar - sv.inelig) * sv.adv - (selBorrower.limit * sv.line / 100)), source: 'eCapital borrowing base', boxStyle: '' },
         { label: 'Dilution', text: sv.dil.toFixed(1) + '%', source: 'eCapital \u00b7 watch at 3%, act at 5%', boxStyle: st.box[sv.dil > 5 ? 2 : sv.dil >= 3 ? 1 : 0] },
         { label: 'Cash covers', text: sv.cash.toFixed(1) + ' mo', source: 'Borrower\u2019s books', boxStyle: st.box[this.gradeBank('cash', sv)] },
         { label: 'Receivables current', text: Math.round(sv.arPct) + '%', source: 'eCapital', boxStyle: st.box[this.gradeBank('ar', sv)] },
@@ -1253,20 +1253,21 @@ class Component extends DCLogic {
     };
 
     // Borrower Profile
+    const fmtK = (k) => { const n = Math.round(k), sign = n < 0 ? '\u2212' : ''; const a = Math.abs(n); return sign + (a >= 1000 ? '$' + (a / 1000).toFixed(2) + 'M' : '$' + a + 'K'); };
     const bProf = bs.find(b => b.id === (s.selectedBorrower || 'brightwater')) || bs[0];
     const bv = bProf.at(week);
     const bDrawn = Math.round(bProf.limit * bv.line / 100);
     const bBase = Math.round((bv.ar - bv.inelig) * bv.adv);
     const bAvail = bBase - bDrawn;
     const borrowerData = {
-      limit: bProf.limit,
-      drawn: bDrawn,
-      avail: (bAvail < 0 ? '\u2212$' : '$') + Math.abs(bAvail) + 'K',
+      limit: fmtK(bProf.limit),
+      drawn: fmtK(bDrawn),
+      avail: fmtK(bAvail),
       linePct: Math.round(bv.line),
-      termBal: Math.round(bProf.termLoanOriginal - (week * 4.2)),
+      termBal: fmtK(bProf.termLoanOriginal - (week * 4.2)),
       termPmt: bProf.monthlyPmt,
       dscr: bv.cov.toFixed(2),
-      sweptAmount: Math.round(Math.max(0, (bv.ar * 7 / bv.dso) * (1 - bv.adv) - (bv.ar * 7 / bv.dso) * 0.0175))
+      sweptAmount: fmtK(Math.max(0, (bv.ar * 7 / bv.dso) * (1 - bv.adv) - (bv.ar * 7 / bv.dso) * 0.0175))
     };
     const bCollect30 = bv.ar * Math.min(1, 30 / bv.dso);
     const bBack = bCollect30 * (1 - bv.adv);
