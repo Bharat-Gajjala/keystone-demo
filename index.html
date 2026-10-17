@@ -82,8 +82,16 @@
           <header style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
             <div>
               <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">SBA 7(a) BORROWER HEALTH · PHASE 1</div>
-              <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">First Valley Community Bank: borrower health</h1>
-              <div style="font-size: 14px; color: #4C5D66">Start here: press Play and watch Brightwater Imaging, or jump to the crisis. Thresholds are examples a credit committee would set.</div>
+              <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">{{viewBank}}: borrower health</h1>
+              <div style="font-size: 14px; color: #4C5D66">{{startHint}}</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px">
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap">
+                <span style="font-size: 12px; color: #4C5D66">Signed in as:</span>
+                <button type="button" onClick="{{pickFV}}" style="min-height: 32px; padding: 0 12px; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; {{tabFV}}">First Valley Community Bank</button>
+                <button type="button" onClick="{{pickLS}}" style="min-height: 32px; padding: 0 12px; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; {{tabLS}}">Lakeshore Bank</button>
+              </div>
+              <div style="font-size: 12px; color: #0E4F45; background: #E8F4F1; padding: 6px 10px; border-radius: 6px">&#128274; You see only the {{bankScope}} your bank referred. Other banks&rsquo; borrowers are never shown; only eCapital&rsquo;s internal console sees all partner banks.</div>
             </div>
           </header>
 
@@ -106,7 +114,7 @@
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 14px 18px">
               <div style="font-size: 13px; color: #4C5D66">Keystone Lines Drawn</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700">{{totalDrawn}}</div>
-              <div style="font-size: 11px; color: #4C5D66">Across all partner banks</div>
+              <div style="font-size: 11px; color: #4C5D66">Across your bank&rsquo;s borrowers</div>
             </div>
           </section>
 
@@ -1025,7 +1033,7 @@ class Component extends DCLogic {
       {
         id: 'brightwater',
         name: 'Brightwater Imaging Center',
-        bank: 'Lakeshore Bank',
+        bank: 'First Valley Community Bank',
         industry: 'Outpatient healthcare',
         limit: 600,
         termLoanOriginal: 1800,
@@ -1156,7 +1164,12 @@ class Component extends DCLogic {
     let drawnTotal = 0, committed = 0, watchCount = 0, actCount = 0;
 
     // Bank View Rows
-    const bankRows = bs.map((b) => {
+    const viewBank = s.viewBank || 'First Valley Community Bank';
+    const bankBs = bs.filter(b => b.bank === viewBank);
+    const bankOf = (nm) => { const f = bs.find(b => b.name.split(' ')[0] === nm.split(' ')[0]); return f ? f.bank : null; };
+    let bankDrawn = 0;
+    bs.forEach(b => { const v0 = b.at(week); drawnTotal += b.limit * v0.line / 100; committed += b.limit; });
+    const bankRows = bankBs.map((b) => {
       const v = b.at(week);
       const pct = (x) => (x > 0 ? '+' : x < 0 ? '\u2212' : '') + Math.abs(Math.round(x)) + '%';
       const debtText = v.debt === 0 ? 'None' : v.debt === 1 ? '1 new lender' : 'Daily debits';
@@ -1176,8 +1189,7 @@ class Component extends DCLogic {
 
       const worst = Math.max.apply(null, cells.map(c => c.g));
       bankCounts[worst] += 1;
-      drawnTotal += b.limit * v.line / 100;
-      committed += b.limit;
+      bankDrawn += b.limit * v.line / 100;
 
       return {
         id: b.id,
@@ -1229,7 +1241,7 @@ class Component extends DCLogic {
     });
 
     // Detail Panel
-    const selBorrower = bs.find(b => b.id === s.selected) || bs[3];
+    const selBorrower = bankBs.find(b => b.id === s.selected) || bankBs.find(b => b.id === 'brightwater') || bankBs[0];
     const sv = selBorrower.at(week);
     const selKeys = ['cov', 'cash', 'rev', 'ap', 'debt', 'ar', 'conc', 'line', 'books'];
     const selWorst = Math.max.apply(null, selKeys.map(k => this.gradeBank(k, sv)));
@@ -1283,6 +1295,7 @@ class Component extends DCLogic {
       if (w === 9) events.push({ w: 9, name: 'Northgate Supply', word: 'Watch', badgeStyle: st.badge[1], text: 'Another lender filed a claim that may cover receivables; advances paused for review', when: this.weekLabelFor(w) });
       if (w === 10) events.push({ w: 10, name: 'Brightwater Imaging', word: 'Act now', badgeStyle: st.badge[2], text: 'joint workout begins with the bank and eCapital', when: this.weekLabelFor(w) });
     }
+    for (let k = events.length - 1; k >= 0; k--) { if (bankOf(events[k].name) !== viewBank) events.splice(k, 1); }
     events.sort((a, b) => b.w - a.w);
 
     const fraudOpen = (bs[3].at(week).mis ? 1 : 0) + (bs[4].at(week).lien ? 1 : 0) + (bs[1].at(week).dup ? 1 : 0) + (bs[3].at(week).dil > 4 ? 1 : 0);
@@ -1309,7 +1322,7 @@ class Component extends DCLogic {
     const sidebars = {
       bank: {
         title: 'Bank Risk Portal',
-        sub: 'First Valley Community Bank',
+        sub: viewBank,
         links: [
           { label: 'Borrower health · Phase 1', onClick: () => this.setState({ bankSubTab: 'health' }), style: bTab === 'health' ? 'background: #22343F; color: #FFF' : 'color: #DDE5E8; background: transparent' },
           { label: 'Loan-file review · Phase 2+', onClick: () => this.setState({ bankSubTab: 'radar' }), style: bTab === 'radar' ? 'background: #22343F; color: #FFF' : 'color: #DDE5E8; background: transparent' },
@@ -1319,7 +1332,7 @@ class Component extends DCLogic {
       },
       ecap: {
         title: 'eCapital Operations',
-        sub: 'Risk & Collateral Desk',
+        sub: 'Risk desk \u00b7 all partner banks (internal)',
         links: [
           { label: 'Collateral and borrowing base', onClick: () => this.setState({ ecapSubTab: 'collateral' }), style: eTab === 'collateral' ? 'background: #1C3E45; color: #FFF' : 'color: #D7E6E8; background: transparent' },
           { label: 'Verification and fraud checks', onClick: () => this.setState({ ecapSubTab: 'verify' }), style: eTab === 'verify' ? 'background: #1C3E45; color: #FFF' : 'color: #D7E6E8; background: transparent' },
@@ -1351,6 +1364,7 @@ class Component extends DCLogic {
       { name: 'Northgate Building Supply', industry: 'Building Materials', bg: ngLien ? '#FFF7F6' : '#FFFFFF', lienText: ngLien ? 'New lender claim filed' : 'None', lienStyle: ngLien ? 'color: #8A1C1C' : 'color: #0E4F45' },
     ];
 
+    for (let k = radarAuditRows.length - 1; k >= 0; k--) { if (bankOf(radarAuditRows[k].name) !== viewBank) radarAuditRows.splice(k, 1); }
     const radarDefectCount = (bwDebt > 0 ? 1 : 0) + (ngLien ? 1 : 0);
     const gateRefs = Math.min(46, 18 + Math.round(week * 2.2));
 
@@ -1374,8 +1388,8 @@ class Component extends DCLogic {
     const sweep = { collected: kfmt(colWk), paydown: kfmt(payWk), excess: kfmt(colWk - payWk - feeWk) };
 
     // workout room follows the timeline
-    const workoutActive = bwNow.alert === 2;
-    const workoutHint = bwNow.alert === 1 ? 'Brightwater Imaging received an advance-rate notice and is close to the workout threshold.' : 'Press Jump to the crisis to see the joint workout.';
+    const workoutActive = bwNow.alert === 2 && bankOf('Brightwater') === viewBank;
+    const workoutHint = bankOf('Brightwater') !== viewBank ? 'No borrower at this bank has crossed the workout thresholds.' : (bwNow.alert === 1 ? 'Brightwater Imaging received an advance-rate notice and is close to the workout threshold.' : 'Press Jump to the crisis to see the joint workout.');
 
     return {
       isBank: persona === 'bank',
@@ -1429,7 +1443,15 @@ class Component extends DCLogic {
       countGreen: bankCounts[0],
       countAmber: bankCounts[1],
       countRed: bankCounts[2],
-      totalDrawn: '$' + (drawnTotal / 1000).toFixed(2) + 'M',
+      totalDrawn: '$' + (bankDrawn / 1000).toFixed(2) + 'M',
+      viewBank: viewBank,
+      bankCount: String(bankBs.length),
+      bankScope: bankBs.length === 1 ? '1 borrower' : bankBs.length + ' borrowers',
+      startHint: bankOf('Brightwater') === viewBank ? 'Start here: press Play and watch Brightwater Imaging, or jump to the crisis. Thresholds are examples a credit committee would set.' : 'Press Play to run 13 weeks. Thresholds are examples a credit committee would set.',
+      pickFV: () => this.setState({ viewBank: 'First Valley Community Bank' }),
+      pickLS: () => this.setState({ viewBank: 'Lakeshore Bank' }),
+      tabFV: viewBank === 'First Valley Community Bank' ? 'background: #0B5F6B; color: #FFFFFF; border: 1px solid #0B5F6B' : 'background: #FFFFFF; color: #15222B; border: 1px solid #9DB0B8',
+      tabLS: viewBank === 'Lakeshore Bank' ? 'background: #0B5F6B; color: #FFFFFF; border: 1px solid #0B5F6B' : 'background: #FFFFFF; color: #15222B; border: 1px solid #9DB0B8',
       bankRows: bankRows,
       ecapRows: ecapRows,
       detail: detail,
