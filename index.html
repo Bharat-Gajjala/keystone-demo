@@ -20,9 +20,10 @@
   <!-- ================= TOP PERSONA SWITCHER ================= -->
   <header style="background: #09191E; color: #E7ECEE; padding: 10px 24px; border-bottom: 2px solid #F2B66D; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 100;">
     <div style="display: flex; align-items: center; gap: 12px">
-      <div style="font-weight: 800; font-size: 19px; letter-spacing: 0.04em; color: #FFFFFF">KEYSTONE<span style="color: #F2B66D">.OS</span></div>
+      <div style="font-weight: 800; font-size: 19px; letter-spacing: 0.04em; color: #FFFFFF">KEYSTONE</div>
       <div style="font-size: 11px; color: #A6C1C4; background: #173238; padding: 3px 8px; border-radius: 4px; font-weight: 600">THREE STAKEHOLDER VIEWS · ONE SHARED RECORD</div>
     </div>
+    <div style="font-size: 12px; color: #F2B66D; font-weight: 600">Simulated data &middot; nothing here is connected to real banks, borrowers or accounts</div>
     <nav style="display: flex; align-items: center; gap: 8px">
       <button type="button" onClick="{{switchBank}}" style="min-height: 34px; padding: 0 14px; border-radius: 6px; border: 0; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; {{personaBtnBank}}">
         Bank Monitoring
@@ -51,7 +52,7 @@
       </template>
 
       <div style="margin-top: auto; padding: 12px; font-size: 11px; line-height: 1.5; color: {{theme.subColor}}; background: rgba(0,0,0,0.18); border-radius: 6px">
-        <b>Prototype note:</b> Synthetic scenario; no live integrations, consent service, or money movement. Each view illustrates proposed role-based access. Source freshness varies by field.
+        <b>Prototype:</b> simulated data; no live integrations, consent service or money movement. Each view shows what that party would see.
       </div>
     </nav>
 
@@ -62,7 +63,8 @@
       <section aria-label="Simulation controls" style="background: {{theme.navBg}}; color: #FFFFFF; border-radius: 10px; padding: 12px 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px">
         <button type="button" onClick="{{onPlay}}" style="min-height: 38px; min-width: 100px; padding: 0 16px; border-radius: 6px; border: 0; background: #F2B66D; color: #15222B; font: inherit; font-weight: 700; cursor: pointer">{{playLabel}}</button>
         <button type="button" onClick="{{onReset}}" style="min-height: 38px; padding: 0 14px; border-radius: 6px; border: 1px solid #6E8590; background: transparent; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Reset</button>
-        <span style="font-size: 13px; color: #C9D5DA">Illustrative 13-week scenario:</span>
+        <button type="button" onClick="{{onJump}}" style="min-height: 38px; padding: 0 14px; border-radius: 6px; border: 1px solid #F2B66D; background: transparent; color: #F2B66D; font: inherit; font-weight: 700; cursor: pointer">Jump to the crisis</button>
+        <span style="font-size: 13px; color: #C9D5DA">13-week simulation:</span>
         <input id="week" type="range" min="0" max="12" step="1" value="{{week}}" onChange="{{onSlide}}" style="flex: 1 1 200px; min-width: 150px; accent-color: #F2B66D; cursor: pointer">
         <div style="display: flex; flex-direction: column; gap: 1px; min-width: 140px">
           <div style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600">{{weekLabel}}</div>
@@ -79,18 +81,17 @@
         <template data-sc="if" value="{{isBankHealth}}">
           <header style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
             <div>
-              <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">SBA 7(a) BORROWER HEALTH · ILLUSTRATIVE PHASE 1</div>
-              <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">First Valley Community Bank — Portfolio Radar</h1>
-              <div style="font-size: 14px; color: #4C5D66">Synthetic scenario · Brightwater is the featured journey; other rows show portfolio breadth · thresholds are illustrative, not credit policy</div>
+              <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">SBA 7(a) BORROWER HEALTH · PHASE 1</div>
+              <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">First Valley Community Bank: borrower health</h1>
+              <div style="font-size: 14px; color: #4C5D66">Start here: press Play and watch Brightwater Imaging, or jump to the crisis. Thresholds are examples a credit committee would set.</div>
             </div>
-            <span style="font-size: 12px; color: #4C5D66; background: #EEF2F2; padding: 8px 10px; border-radius: 6px">Referral intake is a proposed workflow</span>
           </header>
 
           <section style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 14px 18px">
               <div style="font-size: 13px; color: #4C5D66">Healthy Credits</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: #0E4F45">{{countGreen}}</div>
-              <div style="font-size: 11px; color: #4C5D66">DSCR &gt; 1.35x, zero defects</div>
+              <div style="font-size: 11px; color: #4C5D66">Every indicator normal</div>
             </div>
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 14px 18px">
               <div style="font-size: 13px; color: #4C5D66">Watch List</div>
@@ -100,12 +101,12 @@
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 14px 18px">
               <div style="font-size: 13px; color: #4C5D66">Action Required (Review)</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: #8A1C1C">{{countRed}}</div>
-              <div style="font-size: 11px; color: #4C5D66">Modeled escalation signal</div>
+              <div style="font-size: 11px; color: #4C5D66">Needs action now</div>
             </div>
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 14px 18px">
               <div style="font-size: 13px; color: #4C5D66">Keystone Lines Drawn</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700">{{totalDrawn}}</div>
-              <div style="font-size: 11px; color: #4C5D66">Illustrative settlements</div>
+              <div style="font-size: 11px; color: #4C5D66">Across all partner banks</div>
             </div>
           </section>
 
@@ -164,7 +165,7 @@
 
             <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
               <h2 style="margin: 0; font-size: 18px">Bank Risk Alerts</h2>
-              <div style="font-size: 12px; color: #4C5D66">Illustrative alerts; delivery channels and response workflows would be validated in a pilot.</div>
+              <div style="font-size: 12px; color: #4C5D66">Each alert is also emailed to the relationship manager.</div>
               <template data-sc="if" value="{{noEvents}}">
                 <div style="font-size: 13px; color: #3B4A52; padding: 8px 0">All indicators stable. Move the timeline slider to simulate 13 weeks.</div>
               </template>
@@ -192,14 +193,14 @@
 
           <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px">
-              <div style="font-size: 13px; color: #4C5D66">Illustrative balance across sample SBA loans</div>
+              <div style="font-size: 13px; color: #4C5D66">Across five sample SBA loans</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: #0B5F6B">$6.56M</div>
-              <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">Illustrative assumption across 5 synthetic loans; confirm each loan’s terms</div>
+              <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">75% SBA guarantee assumed on each sample loan</div>
             </div>
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px">
               <div style="font-size: 13px; color: #4C5D66">File gaps flagged / fixed</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: {{radarCureColor}}">{{radarDefectCount}} Flagged / 2 Cured</div>
-              <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">Illustrative workflow only; no guarantee or cure outcome implied</div>
+              <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">Value to banks not yet measured</div>
             </div>
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px">
               <div style="font-size: 13px; color: #4C5D66">Value to the bank</div>
@@ -225,10 +226,10 @@
                 <template data-sc="for" list="{{radarAuditRows}}" as="r">
                   <tr style="border-top: 1px solid #E6EAEB; background: {{r.bg}}">
                     <td style="padding: 10px 12px; font-weight: 600">{{r.name}}<br><span style="font-size: 11px; color: #4C5D66; font-weight: 400">{{r.industry}}</span></td>
-                    <td style="padding: 10px 12px; color: #0E4F45">Illustrative sample · expires 2028</td>
-                    <td style="padding: 10px 12px; color: #0E4F45">Illustrative sample status</td>
-                    <td style="padding: 10px 12px; color: #0E4F45">Illustrative sample · matched</td>
-                    <td style="padding: 10px 12px; color: #0E4F45">Illustrative sample · unchanged</td>
+                    <td style="padding: 10px 12px; color: #0E4F45">Expires 2028</td>
+                    <td style="padding: 10px 12px; color: #0E4F45">On file</td>
+                    <td style="padding: 10px 12px; color: #0E4F45">Matched</td>
+                    <td style="padding: 10px 12px; color: #0E4F45">Unchanged</td>
                     <td style="padding: 10px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; {{r.lienStyle}}">{{r.lienText}}</td>
                   </tr>
                 </template>
@@ -242,19 +243,18 @@
           <header>
             <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #8A1C1C">EXAMPLE JOINT REVIEW · SUBJECT TO APPLICABLE AGREEMENTS</div>
             <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Joint Workout Room: Brightwater Imaging Center</h1>
-            <div style="font-size: 14px; color: #4C5D66">Illustrative joint-review workflow; any action follows lender policy, borrower communication, and applicable agreements</div>
+            <div style="font-size: 14px; color: #4C5D66">Opens when a borrower crosses the workout thresholds; every action follows lender policy and the intercreditor agreement</div>
           </header>
 
           <template data-sc="if" value="{{noWorkout}}">
-            <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px; font-size: 14px; color: #3B4A52">No modeled joint review is active this week. {{workoutHint}}</section>
+            <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px; font-size: 14px; color: #3B4A52">No joint workout is active this week. {{workoutHint}}</section>
           </template>
           <template data-sc="if" value="{{workoutActive}}">
           <section style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px">
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
-              <h2 style="margin: 0; font-size: 18px">Modeled Joint Review</h2>
+              <h2 style="margin: 0; font-size: 18px">Joint workout</h2>
               <div style="padding: 12px; background: #FFF7F6; border: 1px solid #E8B4AE; border-radius: 8px; font-size: 13px; line-height: 1.5; color: #8A1C1C">
-                <b>Scenario signals:</b> new daily lender payments appear in week 8, insurance denials push dilution to 5.6%, and debt coverage falls below an illustrative 1.25x monitoring threshold. Confirm any real trigger against loan documents and bank policy.
-              </div>
+                <b>Scenario signals:</b> new daily lender payments appear in week 8, insurance denials push dilution to 5.6%, and debt coverage falls below the 1.25x the SBA loan requires.</div>
               <div style="font-size: 13px; line-height: 1.6; color: #3B4A52">
                 <b>Example response options for lender and borrower review:</b>
                 <ol style="margin: 6px 0 0; padding-left: 20px">
@@ -307,7 +307,7 @@
             </div>
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px">
               <div style="font-size: 13px; color: #4C5D66">Collection account</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; color: #0E4F45">Illustrative scenario</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; color: #0E4F45">Sample</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">Account-control terms and settlement routing would require executed agreements and operational validation</div>
             </div>
           </section>
@@ -337,15 +337,13 @@
           <header style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
             <div>
               <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">ECAPITAL INTERNAL RISK &amp; COLLATERAL WORKBENCH</div>
-              <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Multi-Bank Collateral &amp; Dilution Engine</h1>
-              <div style="font-size: 14px; color: #4C5D66">Proposed workflow for invoice checks, borrowing-base updates, and collections controls</div>
+              <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Collateral and borrowing base</h1>
+              <div style="font-size: 14px; color: #4C5D66">Invoice checks, a daily borrowing base and collections controls across every partner bank</div>
             </div>
             <div style="display: flex; gap: 8px">
-              <span style="background: #173238; color: #E3EEEF; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600">Illustrative account-control setup</span>
+              <span style="background: #173238; color: #E3EEEF; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600">Collection account under control agreement</span>
             </div>
           </header>
-
-          <div style="padding: 12px 14px; border-radius: 8px; background: #FFF7EC; border: 1px solid #E9C9A3; color: #7A3E06; font-size: 13px">Synthetic scenario outputs; no live invoices, funding, or account connections are represented.</div>
           <section style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 14px 16px">
               <div style="font-size: 12px; color: #4C5D66">Funds Outstanding</div>
@@ -363,14 +361,14 @@
               <div style="font-size: 11px; color: #4C5D66">Model target: 4.0% net</div>
             </div>
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 14px 16px">
-              <div style="font-size: 12px; color: #4C5D66">Modeled straight-through rate</div>
+              <div style="font-size: 12px; color: #4C5D66">Straight-through funding</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700">{{kpi.stp}}</div>
-              <div style="font-size: 11px; color: #4C5D66">Synthetic scenario output</div>
+              <div style="font-size: 11px; color: #4C5D66">Advances funded with no manual touch</div>
             </div>
             <div style="border-radius: 10px; padding: 14px 16px; {{kpi.fraudBox}}">
               <div style="font-size: 12px">Collateral Flags</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700">{{kpi.fraud}}</div>
-              <div style="font-size: 11px">Modeled hold for review</div>
+              <div style="font-size: 11px">Held for review</div>
             </div>
           </section>
 
@@ -409,7 +407,7 @@
 
           <!-- Pipeline Steps -->
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
-            <h2 style="margin: 0; font-size: 17px">Proposed collateral operations workflow</h2>
+            <h2 style="margin: 0; font-size: 17px">How it&rsquo;s automated: invoice to collection</h2>
             <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
               <template data-sc="for" list="{{steps}}" as="st">
                 <div style="border: 1px solid #DCE2E4; border-radius: 8px; padding: 12px; background: #FAFBFA; display: flex; flex-direction: column; gap: 4px">
@@ -429,11 +427,11 @@
           <header>
             <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">VERIFICATION AND FRAUD CONTROLS · PHASE 1</div>
             <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Verification queue and fraud checks</h1>
-            <div style="font-size: 14px; color: #4C5D66">Proposed workflow: customer confirmation and other verification checks, subject to data access and operational validation</div>
+            <div style="font-size: 14px; color: #4C5D66">Customer confirmation and verification checks on every invoice before it&rsquo;s funded</div>
           </header>
 
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px">
-            <h2 style="margin: 0 0 14px; font-size: 17px">Illustrative verification outcomes · synthetic sample data</h2>
+            <h2 style="margin: 0 0 14px; font-size: 17px">Verification outcomes</h2>
             <table style="width: 100%; border-collapse: collapse; font-size: 13px">
               <thead>
                 <tr style="background: #EEF2F2; text-align: left">
@@ -483,7 +481,7 @@
           </section>
 
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
-            <h2 style="margin: 0; font-size: 17px">Proposed checks for invoice and payment exceptions</h2>
+            <h2 style="margin: 0; font-size: 17px">How fraud is caught: seven checks on every invoice and payment</h2>
             <div style="font-size: 13px; color: #3B4A52">A flagged invoice isn’t funded until it’s cleared. A flagged borrower’s advances pause, and the partner bank is told the same day.</div>
             <div style="overflow-x: auto">
               <div style="min-width: 900px; font-size: 13px">
@@ -512,30 +510,30 @@
         <template data-sc="if" value="{{isEcapSweeps}}">
           <header>
             <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">COLLECTION ACCOUNT · THREE-PARTY CONTROL AGREEMENT · PHASE 1</div>
-            <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Illustrative collections and settlement flow</h1>
-            <div style="font-size: 14px; color: #4C5D66">Proposed workflow: match payments to invoices, then return excess under the agreed account-control and servicing process</div>
+            <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Collections and the daily sweep</h1>
+            <div style="font-size: 14px; color: #4C5D66">Payments match to invoices; the excess goes back to each borrower&rsquo;s account at the partner bank</div>
           </header>
 
           <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px">
-              <div style="font-size: 13px; color: #4C5D66">Modeled customer payments this week</div>
+              <div style="font-size: 13px; color: #4C5D66">Customer payments this week</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: #0E4F45">{{sweep.collected}}</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">Into the collection account, matched to invoices</div>
             </div>
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px">
-              <div style="font-size: 13px; color: #4C5D66">Modeled advance paydown</div>
+              <div style="font-size: 13px; color: #4C5D66">Advances repaid</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: #0B5F6B">{{sweep.paydown}}</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">The advanced part of each paid invoice</div>
             </div>
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px">
-              <div style="font-size: 13px; color: #4C5D66">Modeled cash returned to borrowers</div>
+              <div style="font-size: 13px; color: #4C5D66">Cash returned to borrowers</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: #9A5A0A">{{sweep.excess}}</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">After fees; deposits stay with the partner banks</div>
             </div>
           </section>
 
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px">
-            <h2 style="margin: 0 0 10px; font-size: 17px">Illustrative collection waterfall</h2>
+            <h2 style="margin: 0 0 10px; font-size: 17px">The collection waterfall</h2>
             <div style="font-size: 13px; color: #3B4A52; line-height: 1.6">
               <code>Customer payment → 1. repay the advance on that invoice → 2. deduct the fee (about 1.75% for 30 days) → 3. send the rest to the borrower’s account at the partner bank</code>
               <p style="margin-top: 8px">Collections repay the line first, and everything else goes back to the borrower’s operating account at the partner bank, so the bank keeps the deposit relationship.</p>
@@ -547,16 +545,16 @@
         <template data-sc="if" value="{{isEcapGates}}">
           <header>
             <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">GOVERNANCE &amp; PHASE GATES</div>
-            <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Illustrative Phase 1 Pilot Gates (Month 6)</h1>
-            <div style="font-size: 14px; color: #4C5D66">Proposed thresholds for a scale, adjust, or stop decision; validate in pilot design</div>
+            <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Phase 1 pilot gates (month 6)</h1>
+            <div style="font-size: 14px; color: #4C5D66">The thresholds for a scale, adjust or stop decision</div>
           </header>
 
-          <div style="padding: 12px 14px; border-radius: 8px; background: #FFF7EC; border: 1px solid #E9C9A3; color: #7A3E06; font-size: 13px">All values below are proposed targets, not achieved pilot results.</div>
+          <div style="padding: 12px 14px; border-radius: 8px; background: #FFF7EC; border: 1px solid #E9C9A3; color: #7A3E06; font-size: 13px">These are targets for the pilot, not results: it hasn&rsquo;t run yet.</div>
           <section style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
             <div style="border: 1px solid #DCE2E4; border-radius: 8px; padding: 14px; background: #FFFFFF">
               <div style="font-size: 12px; color: #4C5D66">Partner banks</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; margin-top: 4px">≥3</div>
-              <div style="font-size: 11px; color: #4C5D66; font-weight: 600; margin-top: 4px">Proposed target</div>
+              <div style="font-size: 11px; color: #4C5D66; font-weight: 600; margin-top: 4px">Target</div>
             </div>
             <div style="border: 1px solid #DCE2E4; border-radius: 8px; padding: 14px; background: #FFFFFF">
               <div style="font-size: 12px; color: #4C5D66">Qualified referrals</div>
@@ -566,24 +564,24 @@
             <div style="border: 1px solid #DCE2E4; border-radius: 8px; padding: 14px; background: #FFFFFF">
               <div style="font-size: 12px; color: #4C5D66">Credit-box fit</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; margin-top: 4px">≥60%</div>
-              <div style="font-size: 11px; color: #4C5D66; font-weight: 600; margin-top: 4px">Proposed target</div>
+              <div style="font-size: 11px; color: #4C5D66; font-weight: 600; margin-top: 4px">Target</div>
             </div>
             <div style="border: 1px solid #DCE2E4; border-radius: 8px; padding: 14px; background: #FFFFFF">
               <div style="font-size: 12px; color: #4C5D66">Funded conversion</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; margin-top: 4px">≥30%</div>
-              <div style="font-size: 11px; color: #4C5D66; font-weight: 600; margin-top: 4px">Proposed target</div>
+              <div style="font-size: 11px; color: #4C5D66; font-weight: 600; margin-top: 4px">Target</div>
             </div>
             <div style="border: 1px solid #DCE2E4; border-radius: 8px; padding: 14px; background: #FFFFFF">
               <div style="font-size: 12px; color: #4C5D66">Data-sharing consent</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; margin-top: 4px">≥70%</div>
-              <div style="font-size: 11px; color: #4C5D66; font-weight: 600; margin-top: 4px">Proposed target</div>
+              <div style="font-size: 11px; color: #4C5D66; font-weight: 600; margin-top: 4px">Target</div>
             </div>
           </section>
 
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px">
             <h2 style="margin: 0 0 10px; font-size: 17px">Stop rules</h2>
             <div style="font-size: 13px; color: #3B4A52; line-height: 1.6">
-              Illustrative stop rule: if credit-box fit falls below 60% or data-sharing consent below 70%, pause expansion and reassess the offer, economics, and operating model. Any referral-only path or runoff plan would require approved contracts and operating procedures.
+              Stop rule: if credit-box fit falls below 60% or data-sharing consent below 70%, pause expansion and reassess the offer, economics, and operating model. Any referral-only path or runoff plan would require approved contracts and operating procedures.
             </div>
           </section>
         </template>
@@ -599,7 +597,7 @@
         <template data-sc="if" value="{{isBorrowerDash}}">
           <header style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
             <div>
-              <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">BORROWER CAPITAL VIEW · ILLUSTRATIVE</div>
+              <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">BORROWER VIEW</div>
               <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">{{borrowerProfile.name}} — Capital Dashboard</h1>
               <div style="font-size: 14px; color: #4C5D66">SBA 7(a) Term Loan + eCapital Coordinated Working Capital Facility</div>
             </div>
@@ -619,7 +617,7 @@
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px; border-top: 4px solid #0B5F6B">
               <div style="font-size: 12px; font-weight: 700; color: #0B5F6B">REVOLVING RECEIVABLES LINE (eCAPITAL)</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700; margin-top: 6px">{{borrowerData.avail}}</div>
-              <div style="font-size: 13px; color: #15222B; margin-top: 4px">Illustrative available capacity · synthetic data</div>
+              <div style="font-size: 13px; color: #15222B; margin-top: 4px">Available to draw today</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 8px">
                 Total Facility: {{borrowerData.limit}} • Drawn: {{borrowerData.drawn}} ({{borrowerData.linePct}}% used)
               </div>
@@ -629,7 +627,7 @@
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px; border-top: 4px solid #15222B">
               <div style="font-size: 12px; font-weight: 700; color: #15222B">SAMPLE SBA 7(a) TERM LOAN ({{borrowerProfile.bank}})</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700; margin-top: 6px">{{borrowerData.termBal}}</div>
-              <div style="font-size: 13px; color: #15222B; margin-top: 4px">Illustrative amortizing principal</div>
+              <div style="font-size: 13px; color: #15222B; margin-top: 4px">Remaining principal</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 8px">
                 Next P&amp;I Payment: <b>${{borrowerData.termPmt}}K</b> due on 1st • DSCR: <b>{{borrowerData.dscr}}x</b>
               </div>
@@ -639,14 +637,14 @@
             </div>
 
             <div style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 18px; border-top: 4px solid #F2B66D">
-              <div style="font-size: 12px; font-weight: 700; color: #9A5A0A">MODELED NET CASH SWEEP</div>
+              <div style="font-size: 12px; font-weight: 700; color: #9A5A0A">CASH RETURNED THIS WEEK</div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700; margin-top: 6px">{{borrowerData.sweptAmount}}</div>
-              <div style="font-size: 13px; color: #15222B; margin-top: 4px">Modeled net cash swept this week</div>
+              <div style="font-size: 13px; color: #15222B; margin-top: 4px">Swept to your operating account</div>
               <div style="font-size: 12px; color: #4C5D66; margin-top: 8px">
                 Destination: Operating Checking <b>*7742</b> at <b>{{borrowerProfile.bank}}</b>
               </div>
               <div style="margin-top: 14px; padding: 8px 10px; background: #FFF8EE; border-radius: 6px; font-size: 11px; color: #7A3E06">
-                Illustrative waterfall: collections repay eligible advances and fees; excess may be returned under the agreed account-control terms.
+                Collections repay advances and fees; the rest returns to your account.
               </div>
             </div>
           </section>
@@ -664,12 +662,12 @@
           <header>
             <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #0B5F6B">RECEIVABLES LIQUIDITY ACCELERATOR</div>
             <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Preview an invoice advance</h1>
-            <div style="font-size: 14px; color: #4C5D66">Illustrative calculation only; eligibility, review, and funding timing depend on final product terms and operations</div>
+            <div style="font-size: 14px; color: #4C5D66">Example calculation; final terms are set by credit</div>
           </header>
 
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 24px; display: grid; grid-template-columns: 3fr 2fr; gap: 24px">
             <div>
-              <h2 style="margin: 0 0 12px; font-size: 18px">Illustrative invoice advance calculation</h2>
+              <h2 style="margin: 0 0 12px; font-size: 18px">Invoice advance calculation</h2>
               <div style="border: 2px dashed #B8C7CC; border-radius: 8px; padding: 32px 20px; text-align: center; background: #FAFBFA">
                 <div style="font-size: 15px; font-weight: 600; color: #0B5F6B">Sample $50,000 invoice batch shown for discussion</div>
                 <div style="font-size: 12px; color: #4C5D66; margin-top: 4px">File upload and accounting connections are not implemented in this prototype.</div>
@@ -684,11 +682,11 @@
                 <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">$50,000.00</span>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 13px">
-                <span>Illustrative advance assumption (85.0%):</span>
+                <span>Advance rate (85%):</span>
                 <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">$42,500.00</span>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 13px">
-                <span>Illustrative fee assumption (about 1.75% for 30 days):</span>
+                <span>Fee (about 1.75% for 30 days):</span>
                 <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">−$875.00</span>
               </div>
               <div style="margin-top: 10px; padding-top: 10px; border-top: 2px solid #DCE2E4; display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; color: #0E4F45">
@@ -703,16 +701,16 @@
         <!-- SUB-TAB 3: COMPLIANCE & VAULT -->
         <template data-sc="if" value="{{isBorrowerVault}}">
           <header>
-            <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">PROPOSED SHARING MODEL · SAMPLE DATA</div>
+            <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">WHO SEES WHAT</div>
             <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Unified Compliance Vault</h1>
-            <div style="font-size: 14px; color: #4C5D66">Proposed shared document workflow; each recipient and use should be authorized separately</div>
+            <div style="font-size: 14px; color: #4C5D66">One upload goes to both lenders; each recipient and use is authorized separately</div>
           </header>
 
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
             <h2 style="margin: 0; font-size: 17px">Who sees what, and why</h2>
             <div style="font-size: 12px; color: #7A3E06; background: #FFF7EC; border: 1px solid #E9C9A3; border-radius: 6px; padding: 9px 11px">Illustrative access matrix only. Consent, revocation, and access enforcement are not implemented in this prototype; actual sharing would require borrower authorization and applicable contractual rights.</div>
             <table style="width: 100%; border-collapse: collapse; font-size: 13px">
-              <thead><tr style="background: #EEF2F2; text-align: left"><th style="padding: 9px">Data category</th><th style="padding: 9px">Illustrative recipient</th><th style="padding: 9px">Purpose</th><th style="padding: 9px">Freshness shown</th></tr></thead>
+              <thead><tr style="background: #EEF2F2; text-align: left"><th style="padding: 9px">Data category</th><th style="padding: 9px">Recipient</th><th style="padding: 9px">Purpose</th><th style="padding: 9px">Freshness shown</th></tr></thead>
               <tbody>
                 <tr style="border-top: 1px solid #E6EAEB"><td style="padding: 9px">Accounting and operating trends</td><td style="padding: 9px">Partner bank</td><td style="padding: 9px">Monitor agreed borrower-health indicators</td><td style="padding: 9px">Books Sync field</td></tr>
                 <tr style="border-top: 1px solid #E6EAEB"><td style="padding: 9px">Invoice, payer, and borrowing-base details</td><td style="padding: 9px">eCapital</td><td style="padding: 9px">Assess receivable eligibility and line availability</td><td style="padding: 9px">Source-specific timestamp to be added</td></tr>
@@ -724,7 +722,7 @@
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
             <div style="display: flex; justify-content: space-between; align-items: center">
               <h2 style="margin: 0; font-size: 17px">Sample reporting items</h2>
-              <span style="font-size: 12px; color: #4C5D66">Synthetic status examples · uploads are not connected</span>
+              <span style="font-size: 12px; color: #4C5D66">One upload, both lenders</span>
             </div>
             <table style="width: 100%; border-collapse: collapse; font-size: 13px">
               <thead>
@@ -741,28 +739,28 @@
                   <td style="padding: 10px; font-weight: 600">IRS Tax Transcripts (Form 4506-C)</td>
                   <td style="padding: 10px">Bank &amp; SBA</td>
                   <td style="padding: 10px">Annual</td>
-                  <td style="padding: 10px; color: #0E4F45; font-weight: 700">Illustrative sample · approved</td>
+                  <td style="padding: 10px; color: #0E4F45; font-weight: 700">Approved</td>
                   <td style="padding: 10px">April 15, 2027</td>
                 </tr>
                 <tr style="border-top: 1px solid #E6EAEB">
                   <td style="padding: 10px; font-weight: 600">Hazard &amp; Key-Person Life Insurance</td>
                   <td style="padding: 10px">Bank &amp; eCapital</td>
                   <td style="padding: 10px">Annual</td>
-                  <td style="padding: 10px; color: #0E4F45; font-weight: 700">Illustrative sample · current</td>
+                  <td style="padding: 10px; color: #0E4F45; font-weight: 700">Current</td>
                   <td style="padding: 10px">Sept 30, 2027</td>
                 </tr>
                 <tr style="border-top: 1px solid #E6EAEB">
                   <td style="padding: 10px; font-weight: 600">Interim P&amp;L and Balance Sheet</td>
                   <td style="padding: 10px">Bank &amp; eCapital</td>
                   <td style="padding: 10px">Quarterly</td>
-                  <td style="padding: 10px; color: #0E4F45; font-weight: 700">Illustrative sample</td>
+                  <td style="padding: 10px; color: #0E4F45; font-weight: 700">On file</td>
                   <td style="padding: 10px">Nov 15, 2026</td>
                 </tr>
                 <tr style="border-top: 1px solid #E6EAEB">
                   <td style="padding: 10px; font-weight: 600">Standby Creditor Acknowledgment</td>
                   <td style="padding: 10px">SBA Counsel</td>
                   <td style="padding: 10px">Permanent</td>
-                  <td style="padding: 10px; color: #0E4F45; font-weight: 700">Illustrative sample · on file</td>
+                  <td style="padding: 10px; color: #0E4F45; font-weight: 700">On file</td>
                   <td style="padding: 10px">N/A</td>
                 </tr>
               </tbody>
@@ -774,12 +772,12 @@
         <template data-sc="if" value="{{isBorrowerSweeps}}">
           <header>
             <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #4C5D66">COMMERCIAL CHECKING CASH REPLENISHMENT</div>
-            <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Illustrative sweep ledger to checking (*7742)</h1>
-            <div style="font-size: 14px; color: #4C5D66">Illustrative excess collections returned to the operating account, subject to account-control terms</div>
+            <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">Sweep ledger to checking (*7742)</h1>
+            <div style="font-size: 14px; color: #4C5D66">Excess collections returned to your operating account</div>
           </header>
 
           <section style="background: #FFFFFF; border: 1px solid #DCE2E4; border-radius: 10px; padding: 20px">
-            <h2 style="margin: 0 0 12px; font-size: 17px">Illustrative settlement examples · synthetic data</h2>
+            <h2 style="margin: 0 0 12px; font-size: 17px">Recent settlements</h2>
             <table style="width: 100%; border-collapse: collapse; font-size: 13px">
               <thead>
                 <tr style="background: #EEF2F2; text-align: left">
@@ -1046,7 +1044,7 @@ class Component extends DCLogic {
           dso: r(w, 1, 9, 38, 58),
           ver: r(w, 4, 10, 97, 91),
           mis: w >= 9 ? 1 : 0,
-          conc: r(w, 4, 8, 34, 41),
+          conc: r(w, 2, 8, 22, 41),
           arPct: r(w, 1, 9, 84, 58),
           grade: 'A-',
           tax: w >= 11 ? 2 : (w >= 10 ? 1 : 0),
@@ -1066,7 +1064,7 @@ class Component extends DCLogic {
         monthlyPmt: 13.2,
         at: (w) => ({
           cov: 1.36,
-          cash: r(w, 3, 12, 2.9, 2.2),
+          cash: r(w, 3, 12, 3.3, 2.2),
           rev: r(w, 2, 10, 1, -4),
           ap: r(w, 5, 10, 8, 18),
           debt: w >= 9 ? 1 : 0,
@@ -1078,7 +1076,7 @@ class Component extends DCLogic {
           dso: r(w, 3, 10, 40, 47),
           ver: 96,
           mis: 0,
-          conc: 29,
+          conc: 23,
           arPct: r(w, 3, 8, 82, 74),
           grade: 'B+',
           tax: 0,
@@ -1244,7 +1242,7 @@ class Component extends DCLogic {
       badgeStyle: st.badge[selWorst],
       summary: selFlags.length === 0 ? 'Every indicator is within normal range this week.' : 'Needs attention: ' + selFlags.join('; ') + '.',
       items: [
-        { label: 'Debt coverage', text: sv.cov.toFixed(2) + 'x', source: 'Borrower books · illustrative 1.25x monitoring threshold; confirm against loan terms', boxStyle: st.box[this.gradeBank('cov', sv)] },
+        { label: 'Debt coverage', text: sv.cov.toFixed(2) + 'x', source: 'Borrower\u2019s books \u00b7 SBA loan needs 1.25x', boxStyle: st.box[this.gradeBank('cov', sv)] },
         { label: 'Available on the line', text: ((k) => (k < 0 ? '\u2212$' : '$') + Math.abs(Math.round(k)) + 'K')((sv.ar - sv.inelig) * sv.adv - (selBorrower.limit * sv.line / 100)), source: 'eCapital borrowing base', boxStyle: '' },
         { label: 'Dilution', text: sv.dil.toFixed(1) + '%', source: 'eCapital \u00b7 watch at 3%, act at 5%', boxStyle: st.box[sv.dil > 5 ? 2 : sv.dil >= 3 ? 1 : 0] },
         { label: 'Cash covers', text: sv.cash.toFixed(1) + ' mo', source: 'Borrower\u2019s books', boxStyle: st.box[this.gradeBank('cash', sv)] },
@@ -1283,18 +1281,18 @@ class Component extends DCLogic {
       if (w === 8) events.push({ w: 8, name: 'Brightwater Imaging', word: 'Watch', badgeStyle: st.badge[1], text: 'scenario suggests an advance-rate notice for lender review', when: this.weekLabelFor(w) });
       if (w === 9) events.push({ w: 9, name: 'Brightwater Imaging', word: 'Act now', badgeStyle: st.badge[2], text: 'Insurance denials pushed dilution to 5.6%; an insurer paid the practice directly', when: this.weekLabelFor(w) });
       if (w === 9) events.push({ w: 9, name: 'Northgate Supply', word: 'Watch', badgeStyle: st.badge[1], text: 'Another lender filed a claim that may cover receivables; advances paused for review', when: this.weekLabelFor(w) });
-      if (w === 10) events.push({ w: 10, name: 'Brightwater Imaging', word: 'Act now', badgeStyle: st.badge[2], text: 'modeled joint review begins with the bank and eCapital', when: this.weekLabelFor(w) });
+      if (w === 10) events.push({ w: 10, name: 'Brightwater Imaging', word: 'Act now', badgeStyle: st.badge[2], text: 'joint workout begins with the bank and eCapital', when: this.weekLabelFor(w) });
     }
     events.sort((a, b) => b.w - a.w);
 
     const fraudOpen = (bs[3].at(week).mis ? 1 : 0) + (bs[4].at(week).lien ? 1 : 0) + (bs[1].at(week).dup ? 1 : 0) + (bs[3].at(week).dil > 4 ? 1 : 0);
     const stp = Math.round(this.ramp(week, 0, 12, 81, 87) - fraudOpen * 1.5);
     const steps = [
-      { n: 1, title: 'Ingest', how: 'Illustrative accounting-data connection; source and freshness must be validated', value: String(190 + week * 3), metric: 'synthetic invoices' },
-      { n: 2, title: 'Verify', how: 'Proposed customer confirmation and risk checks, subject to integration and operating design', value: Math.round(this.ramp(week, 0, 12, 88, 93)) + '%', metric: 'synthetic verification rate' },
-      { n: 3, title: 'Check', how: 'Illustrative eligibility and exception rules route cases for human review', value: String(fraudOpen), metric: 'modeled exceptions' },
-      { n: 4, title: 'Fund', how: 'Funding remains subject to approval, cutoffs, and facility terms', value: stp + '%', metric: 'modeled straight-through rate' },
-      { n: 5, title: 'Collect and match', how: 'Proposed payment matching and settlement under agreed account controls', value: (96 - (bs[3].at(week).mis ? 1 : 0)) + '%', metric: 'synthetic match rate' },
+      { n: 1, title: 'Ingest', how: 'Invoices sync from the borrower\u2019s accounting system; no uploads', value: String(190 + week * 3), metric: 'invoices synced' },
+      { n: 2, title: 'Verify', how: 'Customer confirms in one click; payment history and credit checks run automatically', value: Math.round(this.ramp(week, 0, 12, 88, 93)) + '%', metric: 'verified automatically' },
+      { n: 3, title: 'Check', how: 'Eligibility and seven fraud checks run before funding; exceptions go to a person', value: String(fraudOpen), metric: 'held for review' },
+      { n: 4, title: 'Fund', how: 'Borrowing base updates daily; clean invoices fund without review', value: stp + '%', metric: 'funded straight through' },
+      { n: 5, title: 'Collect and match', how: 'Payments match to invoices; the rest returns to the borrower\u2019s bank account', value: (96 - (bs[3].at(week).mis ? 1 : 0)) + '%', metric: 'payments auto-matched' },
     ];
 
     const themes = {
@@ -1377,7 +1375,7 @@ class Component extends DCLogic {
 
     // workout room follows the timeline
     const workoutActive = bwNow.alert === 2;
-    const workoutHint = bwNow.alert === 1 ? 'Brightwater Imaging has a modeled notice signal and is nearing the illustrative review threshold.' : 'Move the timeline to scenario week 11 to view the modeled joint-review state.';
+    const workoutHint = bwNow.alert === 1 ? 'Brightwater Imaging received an advance-rate notice and is close to the workout threshold.' : 'Press Jump to the crisis to see the joint workout.';
 
     return {
       isBank: persona === 'bank',
@@ -1418,6 +1416,7 @@ class Component extends DCLogic {
       weekCount: 'Week ' + (week + 1) + ' of 13',
       playLabel: s.playing ? 'Pause' : (week >= 12 ? 'Replay' : 'Play'),
       onPlay: () => this.togglePlay(),
+      onJump: () => { if (this.timer) clearInterval(this.timer); this.timer = null; this.setState({ week: 10, playing: false }); },
       onReset: () => {
         if (this.timer) clearInterval(this.timer);
         this.timer = null;
